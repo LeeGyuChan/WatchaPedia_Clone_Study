@@ -2,9 +2,9 @@ import axiosInstance from ".";
 
 export const latestApi = () => axiosInstance.get('/tv/latest');
 
-export const aringTodayApi = () => axiosInstance.get('/tv/upcoming');
+export const airingTodayApi = () => axiosInstance.get('/tv/airing_today');
 
-export const onTheAirApi = () => axiosInstance.get('/tv/now_playing');
+export const onTheAirApi = () => axiosInstance.get('/tv/on_the_air');
 
 export const topRatedApi = () => axiosInstance.get('/tv/top_rated');
 

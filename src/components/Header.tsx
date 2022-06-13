@@ -1,32 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import {AiOutlineSearch} from "react-icons/ai"
+import useMovieSearch from "../features/movie/useMovieSearch";
 
 const Base = styled.header`
+  width: 100%;
+  margin: 0 auto;
+  height: 62px;
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #fff;
+  background-color: rgb(255, 255, 255);
   text-align: center;
-  box-shadow: rgb(0 0 0 / 0%) 0px 1px 0px 0px;
-  width: 100%;
-  height: 62px;
+  box-shadow: rgb(0 0 0 / 8%) 0px 1px 0px 0px;
+  transition: background-color 200ms ease 0s;
   z-index: 10;
 `;
 
 const Navigation = styled.nav`
-  margin: 0 auto; //가운데 정렬
+  margin: 0 auto;
   max-width: 1200px;
 `;
 
-const MenuListWrapper = styled.div``;
+const MenuListWrapper = styled.div`
+`;
 
 const MenuList = styled.ul`
   list-style: none;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   display: flex;
-  overflow: hidden;
 `;
 
 const Menu = styled.li`
@@ -34,18 +37,17 @@ const Menu = styled.li`
   align-items: center;
   height: 62px;
   flex-shrink: 0;
-  &:not(:first-of-type) {
-    margin-left: 24px;
+  &:not(:first-child) {
+    margin: 0 0 0 24px;
   }
 `;
 
-const MenuButton = styled.button<{active?: boolean}>`
+const MenuButton = styled.button<{ active?: boolean }>`
   font-size: 15px;
-  color: ${(props) =>
-    props.active ? "rgb(53, 53 ,53)" : "rgb(126, 126, 126)"};
-    border: none;
-    cursor: pointer;
-    background: none;
+  color: ${({ active }) => active ? 'rgb(53, 53, 53)' : 'rgb(126, 126, 126)'};
+  cursor: pointer;
+  border: none;
+  background: none;
 `;
 
 const SearchMenu = styled.li`
@@ -55,6 +57,7 @@ const SearchMenu = styled.li`
   height: 62px;
   flex-shrink: 1;
   margin: 0 0 0 auto;
+  transition: all 0.5s ease 0s;
   position: relative;
 `;
 
@@ -65,10 +68,10 @@ const Link = styled.a`
 const TextLogo = styled.h1`
   font-size: 24px;
   font-weight: 700;
-  & > span[class="primary"] {
+  > span[class="primary"] {
     color: rgb(255, 47, 110);
   }
-  & > span:not(.primary) {
+  > span:not(.primary) {
     color: #222;
   }
 `;
@@ -78,12 +81,49 @@ const SearchContainer = styled.div`
   width: 100%;
 `;
 
+const SearchResultWrapper = styled.div`
+  position: absolute;
+  top: 60px;
+  left: 0;
+  z-index: 9999999;
+  background-color: #fff;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+  max-height: 480px;
+  overflow-y: scroll;
+`;
+
+const SearchResultListItem = styled.li`
+  padding: 4px 6px;
+  box-sizing: border-box;
+  color: #222;
+  font-size: 16px;
+  width: 100%;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  &:hover {
+    background-color: #eee;
+  }
+`;
+
+const SearchResultList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
 const SearchFormWrapper = styled.div``;
 
 const SearchForm = styled.form``;
 
 const SearchLabel = styled.label`
-  background-color: rgb(245, 245, 247);
+  background: rgb(245, 245, 247);
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -102,7 +142,7 @@ const SearchInput = styled.input`
   border: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  caret-color: rgb(53, 53, 53); // 커서색상
+  caret-color: rgb(53, 53, 53);
   line-height: 23px;
 `;
 
@@ -124,13 +164,30 @@ const SignUp = styled.button`
   height: 32px;
   background: transparent;
   color: rgb(53, 53, 53);
-  font-size:14px;
-  border: 1px solid rgba(116,116,123, 0.5);
+  font-size: 14px;
+  border: 1px solid rgba(116, 116, 123, 0.5);
   cursor: pointer;
-  margin: 15px 0px;
+  margin: 15px 0;
 `;
 
+
 const Header = () => {
+
+  const [searchKeyword, setSearchKeyword]  = useState<string>('');
+
+  const pathname = window.location.pathname;
+
+  const isTv = pathname.indexOf('tv') > -1;
+
+  const handleKeyword = (e:React.ChangeEvent<HTMLInputElement>) : void => {
+    setSearchKeyword(e.target.value);
+    console.log(searchKeyword);
+  }
+
+  const { data : searchResult } = useMovieSearch(searchKeyword);
+
+  console.log(searchResult);
+
   return (
     <Base>
       <Navigation>
@@ -148,7 +205,7 @@ const Header = () => {
               <Link href="/">
                 <MenuButton>영화</MenuButton>
               </Link>
-              <Link href="/">
+              <Link href="/tv">
                 <MenuButton>TV 프로그램</MenuButton>
               </Link>
             </Menu>
@@ -158,11 +215,22 @@ const Header = () => {
                   <SearchForm>
                     <SearchLabel>
                         <AiOutlineSearch/>
-                        <SearchInput placeholder="콘텐츠, 인물, 컬렉션, 유저를 검색해보세요." />
+                        <SearchInput placeholder="콘텐츠, 인물, 컬렉션, 유저를 검색해보세요." onChange={handleKeyword} />
                     </SearchLabel>
                   </SearchForm>
                 </SearchFormWrapper>
               </SearchContainer>
+              <SearchResultWrapper>
+                <SearchResultList>
+                  {
+                    searchResult?.data.results.map(item =>(
+                      <Link key={item.id} href={`/movies/${item.id}`}>
+                          <SearchResultListItem>{item.title}</SearchResultListItem>
+                      </Link>
+                    ))
+                  }
+                </SearchResultList>
+              </SearchResultWrapper>
             </SearchMenu>
             <Menu>
               <SignIn>로그인</SignIn>

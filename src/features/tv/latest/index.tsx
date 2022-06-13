@@ -1,8 +1,8 @@
 import styled from "@emotion/styled"
 import React from "react"
 import Card from "../../../components/Card";
-import useLatestMovie from "./useLatestMovie";
 import * as gavr from '../../../global_variables'
+import useLatestTv from "./useLatestTv";
 
 const Base = styled.div`
     margin-bottom: 42px;
@@ -16,9 +16,9 @@ const Title = styled.h4`
 
 `;
 
-const LatestMovieSection = () =>{
+const LatestTvSection = () =>{
 
-    const { data, isLoading } = useLatestMovie();
+    const { data, isLoading } = useLatestTv();
 
     const getYear = (data:string) => {return data.split('-')[0]};
     
@@ -29,11 +29,11 @@ const LatestMovieSection = () =>{
                 isLoading || !data? (<div>Loading....</div>) 
                 : (
                     <Card
-                        linkUrl={`/movie/${data.data.id}`}
-                        title={data.data.title}
+                        linkUrl={`/tv/${data.data.id}`}
+                        title={data.data.name}
                         posterPath={`${gavr.REACT_APP_IMAGE_PREFIX}/${data.data.poster_path}`}
                         voteAverage ={data.data.vote_average}
-                        year = {getYear(data.data.release_date)}
+                        year = {getYear(data.data.first_air_date)}
                     />
                 )
             }
@@ -41,4 +41,4 @@ const LatestMovieSection = () =>{
     )
 }
 
-export default LatestMovieSection
+export default LatestTvSection

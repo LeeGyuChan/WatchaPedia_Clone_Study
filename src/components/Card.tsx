@@ -26,7 +26,7 @@ const Base = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-    width: 200px;
+    width: 100%;
     height: 300px;
 `;
 
@@ -93,5 +93,4 @@ const Card = ({ linkUrl,  posterPath , title, voteAverage, year} : Props) =>{
         </Styledlink>
     )
 }
-
 export default Card

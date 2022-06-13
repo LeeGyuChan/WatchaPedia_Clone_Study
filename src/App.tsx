@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Link} from 'react-router-dom'
 import Header from './components/Header';
-import MainDetail from './pages/MainDetail';
+import MovieDetail from './pages/MovieDetail';
 import MainPage from './pages/MainPage';
 import TvDetail from './pages/TvDetail';
 import TvPage from './pages/TvPage';
@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path ='/' element={<MainPage/>}/>
         <Route path ='/tv' element={<TvPage/>}/>
-        <Route path ='/movie/:id' element={<MainDetail/>}/>
+        <Route path ='/movie/:id' element={<MovieDetail/>}/>
         <Route path ='/tv/:id' element={<TvDetail/>}/>
       </Routes>
     </BrowserRouter>
