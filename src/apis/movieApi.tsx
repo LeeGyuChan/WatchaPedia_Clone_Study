@@ -10,9 +10,9 @@ export const topRatedApi = () => axiosInstance.get('/movie/top_rated');
 
 export const popularApi = () => axiosInstance.get('/movie/popular');
 
-export const detailApi = (movieId : string) => axiosInstance.get(`/movie/${movieId}`);
+export const detailApi = (movieId : string| undefined) => axiosInstance.get(`/movie/${movieId}`);
 
-export const simnilarApi = (movieId : string) => axiosInstance.get(`movie/${movieId}/similar`);
+export const simnilarApi = (movieId : string | undefined) => axiosInstance.get(`movie/${movieId}/similar`);
 
 export const searchApi = (query:string) => axiosInstance.get(`/search/movie?query=${query}`);
 

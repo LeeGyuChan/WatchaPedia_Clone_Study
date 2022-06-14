@@ -224,7 +224,7 @@ const Header = () => {
                 <SearchResultList>
                   {
                     searchResult?.data.results.map(item =>(
-                      <Link key={item.id} href={`/movies/${item.id}`}>
+                      <Link key={item.id} href={`/movie/${item.id}`}>
                           <SearchResultListItem>{item.title}</SearchResultListItem>
                       </Link>
                     ))

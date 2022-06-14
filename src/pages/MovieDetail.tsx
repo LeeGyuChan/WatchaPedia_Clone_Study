@@ -5,10 +5,13 @@ import { useParams } from 'react-router-dom';
 import { AiOutlinePlus, AiFillEye } from 'react-icons/ai';
 import { FaPen } from 'react-icons/fa';
 import { FiMoreHorizontal } from 'react-icons/fi';
-import { Rating } from '@mui/material';
-
+import * as gvar from '../global_variables'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import useMovieDetail from '../features/movie/useMovieDetail';
+import { Rating } from '@mui/material';
+import DefaultInfo from '../features/movie/detail/DefaultInfo';
+import Similar from '../features/movie/detail/Similar';
 
 
 const Base = styled.div`
@@ -203,20 +206,27 @@ const ContentSectionContainer = styled.div`
 `;
 
 
-type Params = {
-    id: string;
+  interface Props {
+
+  }
+
+  type Params = {
+    id : string;
   }
   
-  interface Props {}
+  const MovieDetail = (props : Props) => {
+    const {id} = useParams<Params>();
+      
+    const { data, isLoading } = useMovieDetail(id);
   
-  const MovieDetail: React.FC<Props> = () => {
-    const { id } = useParams<Params>();
-  
-    // const { isLoading, data } = useMovieDetail(id);
-  
-    // const year = useMemo(() => data?.release_date.split('-')[0] || '', [data]);
-    // const genres = useMemo(() => data?.genres.map(genre => genre.name).join('/') || '', [data]);
-  
+    const year = useMemo(() => {
+       return data?.data.release_date.split('-')[0] || ''
+    }, [data]);
+
+    const genres = useMemo(() =>{
+        return data?.data.genres.map(genre => genre.name).join('/')
+    }, [data]);
+
     return (
       <Base>
         <Header />
@@ -230,7 +240,7 @@ type Params = {
                 <PosterContainer>
                   <Backdrop>
                     <LeftBlur />
-                    <BackdropImage imageUrl={`${process.env.REACT_APP_IMAGE_PREFIX}/${data.backdrop_path}`}>
+                    <BackdropImage imageUrl={`${gvar.REACT_APP_IMAGE_PREFIX}/${data.data.backdrop_path}`}>
                       <LeftGradient />
                       <RightGradient />
                     </BackdropImage>
@@ -243,20 +253,20 @@ type Params = {
                 <Main>
                   <Container>
                     <PosterWrapper>
-                      <Poster src={`${process.env.REACT_APP_IMAGE_PREFIX}/${data.poster_path}`} />
+                      <Poster src={`${gvar.REACT_APP_IMAGE_PREFIX}/${data.data.poster_path}`} />
                     </PosterWrapper>
                     <ContentWrapper>
   
                       {/* 기본정보 */}
   
-                      <Title>{data.title}</Title>
+                      <Title>{data.data.title}</Title>
                       <Keyword>{year} ・ {genres}</Keyword>
-                      <AverageRate>평균 ★{data.vote_average} ({data.vote_count}명)</AverageRate>
+                      <AverageRate>평균 ★{data.data.vote_average} ({data.data.vote_count}명)</AverageRate>
                       <Actions>
                         <StarRate>
                           <StarRateText>평가하기</StarRateText>
                           <RatingWrapper>
-                            <Rating size="large" />
+                            <Rating size="large" /> 
                           </RatingWrapper>
                         </StarRate>
                         <Divider />
@@ -288,8 +298,8 @@ type Params = {
   
               <BottomInfo>
                 <ContentSectionContainer>
-                  {/* <DefaultInfo title={data.title} year={year} genres={genres} runtime={data.runtime} overview={data.overview} />
-                  <Similar id={id} /> */}
+                  <DefaultInfo title={data.data.title} year={year} genres={genres} runtime={data.data.runtime} overview={data.data.overview} />
+                   <Similar id={id} />
                 </ContentSectionContainer>
               </BottomInfo>
             </>
