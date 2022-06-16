@@ -4,7 +4,8 @@ import { detailApi } from "../../apis/movieApi"
 import { MovieDetail } from "../../types"
 
 
-const useMovieDetail = (query : string | undefined) => {
+const useMovieDetail = (query? : string) => {
+    query = query ? query : ''
     return useQuery<AxiosResponse<MovieDetail>, AxiosError>(['detailMovie', query], () => detailApi(query), {enabled: Boolean(query)})
 }
 
